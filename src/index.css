@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geist Mono Variable", var(--font-mono);
+
+  --color-base-100: oklch(98% 0 0);
+  --color-base-200: oklch(97% 0 0);
+  --color-base-300: oklch(92% 0 0);
+  --color-base-content: oklch(20% 0 0);
+  --color-accent: oklch(62% 0.214 259.815);
+  --color-accent-content: oklch(97% 0.014 254.604);
+  --color-error: var(--color-red-500);
+}
+
+:root {
+  overscroll-behavior: none;
+  border: 0;
+  outline: none;
+}
+
+#root {
+  @apply rounded-[10px] overflow-hidden;
+}
+
+* {
+  @apply select-none;
+}
+
+h1,
+h2,
+h3,
+p {
+  @apply cursor-default;
+}
+
+
+.lexical-editor {
+  @apply w-full h-full relative
+}
+
+.lexical-editor[placeholder]::before {
+  content: attr(placeholder);
+  @apply absolute top-0 left-0 pointer-events-none text-base-content/30;
+}
