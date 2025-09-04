@@ -65,7 +65,7 @@ export function Sidebar(props: {
 
   return (
     <aside
-      class={`border-r border-r-base-300 bg-base-100 pt-[52px] ${props.isOpen ? "w-2xs" : "w-0"} transition-all overflow-hidden`}
+      class={`border-r border-r-base-content/10 pt-[52px] ${props.isOpen ? "w-2xs" : "w-0"} transition-all overflow-hidden`}
     >
       <div
         class={`min-w-2xs w-full transition-all ${props.isOpen ? "opacity-100" : "opacity-0"} p-5 pt-0 ${contextMenuPosition() ? "overflow-hidden" : "overflow-scroll"} h-full`}

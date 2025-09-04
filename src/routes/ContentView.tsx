@@ -54,22 +54,24 @@ export default function ContentView() {
   })
 
   return (
-    <main class="h-full w-full flex-col gap-4 cursor-default bg-base-200 pt-[52px]">
-      <header class="absolute inset-x-0 top-0 h-[52px] flex items-center pointer-events-none">
+    <main class="h-screen w-full flex-col gap-4 cursor-default bg-base-200">
+      <header class="absolute inset-x-0 top-0 h-[52px] flex items-center pointer-events-none bg-base-200/80 backdrop-blur-lg border-b border-b-base-content/10 z-40">
         <div class="flex-1"></div>
-        <div class="text-sm text-base-content/50">
+        <div class="text-sm text-base-content/50 z-50">
           {name()}
           {isUnsaved() ? "*" : ""}
         </div>
         <div class="flex-1"></div>
       </header>
-      <div class="p-5 max-w-4xl mx-auto h-full">
-        {rawContents.loading ? null : (
-          <LexicalEditor
-            initialMarkdown={rawContents()}
-            onEditorInit={onEditorInit}
-          />
-        )}
+      <div class="px-10 pt-16 h-full overflow-y-scroll">
+        <div class="max-w-4xl mx-auto min-h-fit h-full">
+          {rawContents.loading ? null : (
+            <LexicalEditor
+              initialMarkdown={rawContents()}
+              onEditorInit={onEditorInit}
+            />
+          )}
+        </div>
       </div>
     </main>
   );

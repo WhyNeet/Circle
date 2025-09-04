@@ -13,6 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "@fontsource-variable/geist-mono": "^5.2.6",
+    "@fontsource-variable/jetbrains-mono": "^5.2.6",
+    "@fontsource/crimson-text": "^5.2.6",
     "@milkdown/kit": "^7.15.5",
     "@milkdown/theme-nord": "^7.15.5",
     "@solidjs/router": "^0.15.3",

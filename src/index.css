@@ -1,7 +1,10 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: "Geist Mono Variable", var(--font-mono);
+  --font-code: "JetBrains Mono Variable", var(--font-mono);
+  --font-quote: "Crimson Text", var(--font-serif);
 
   --color-base-100: oklch(98% 0 0);
   --color-base-200: oklch(97% 0 0);
@@ -18,10 +21,6 @@
   outline: none;
 }
 
-#root {
-  @apply rounded-[10px] overflow-hidden;
-}
-
 * {
   @apply select-none;
 }
@@ -34,10 +33,63 @@ p {
 }
 
 .milkdown {
-  @apply h-full w-full;
+  @apply h-full min-h-fit w-full pb-5;
 }
 
 .milkdown-editor[data-placeholder]::before {
   content: attr(data-placeholder);
   @apply absolute top-0 left-0 pointer-events-none text-base-content/30;
+}
+
+
+.milkdown-editor h1 {
+  @apply text-2xl font-bold leading-loose mt-4;
+}
+
+.milkdown-editor h2 {
+  @apply text-xl font-bold leading-loose mt-4;
+}
+
+.milkdown-editor h3 {
+  @apply text-lg font-bold leading-loose mt-4;
+}
+
+.milkdown-editor h4 {
+  @apply text-base font-bold leading-loose mt-4;
+}
+
+.milkdown-editor p {
+  @apply my-4;
+}
+
+.milkdown-editor code {
+  @apply px-1 py-0.5 bg-base-300 rounded-md;
+}
+
+.milkdown-editor pre {
+  @apply font-code px-4 py-3 my-4 rounded-md bg-base-300 text-sm;
+}
+
+.milkdown-editor pre code {
+  @apply bg-transparent p-0 rounded-none;
+}
+
+.milkdown-editor blockquote {
+  @apply my-4 px-4 py-2 border-l border-l-base-content/70 font-quote italic;
+}
+
+.milkdown-editor blockquote p {
+  @apply text-xl my-0;
+}
+
+.milkdown-editor ul {
+  @apply list-disc pl-12;
+}
+
+.milkdown-editor ul li {
+  @apply my-2;
+}
+
+.milkdown-editor ul li p {
+  @apply my-0;
 }

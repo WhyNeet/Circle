@@ -34,7 +34,7 @@ export function LexicalEditor({
         ctx.update(editorViewOptionsCtx, (prev) => ({
           ...prev,
           attributes: {
-            class: "milkdown-editor h-full w-full outline-none",
+            class: "milkdown-editor h-full min-h-fit w-full outline-none",
             spellcheck: "false",
             autocorrect: "off",
             autocapitalize: "off"

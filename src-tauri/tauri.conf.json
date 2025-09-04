@@ -10,17 +10,7 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [
-      {
-        "title": "circle",
-        "width": 800,
-        "height": 600,
-        "decorations": false,
-        "transparent": true,
-        "minimizable": true,
-        "maximizable": true
-      }
-    ],
+    "windows": [],
     "security": {
       "csp": null
     },

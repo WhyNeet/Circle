@@ -11,6 +11,12 @@ importers:
       '@fontsource-variable/geist-mono':
         specifier: ^5.2.6
         version: 5.2.6
+      '@fontsource-variable/jetbrains-mono':
+        specifier: ^5.2.6
+        version: 5.2.6
+      '@fontsource/crimson-text':
+        specifier: ^5.2.6
+        version: 5.2.6
       '@milkdown/kit':
         specifier: ^7.15.5
         version: 7.15.5(@codemirror/language@6.11.3)(@codemirror/state@6.5.2)(@codemirror/view@6.38.2)(typescript@5.6.3)
@@ -321,6 +327,12 @@ packages:
 
   '@fontsource-variable/geist-mono@5.2.6':
     resolution: {integrity: sha512-vw6T9JGTrYJ980bn7W8iTPhe2jVK5ifunVs7xh9dfTVArjDSkJs03JjeZrH5LKEpGABLXSlSlNU57HRm4tmFMg==}
+
+  '@fontsource-variable/jetbrains-mono@5.2.6':
+    resolution: {integrity: sha512-1pvtyK6H1paBOixbtZ9xfQgArVQ4SJMW3WSGZPOd5PiW3yg0t8umwKnjDMzW2ofb7qSdiXnsnIaHPT36vEOdlg==}
+
+  '@fontsource/crimson-text@5.2.6':
+    resolution: {integrity: sha512-qy2ZgWzwMYapa5yBnc1XO5XQM1txC1x7uQSag6a9y2yVFSilBmeH70tzY8zSfozi+vC+5udoUzk+gsrecxAnPA==}
 
   '@isaacs/fs-minipass@4.0.1':
     resolution: {integrity: sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w==}
@@ -1632,6 +1644,10 @@ snapshots:
   '@floating-ui/utils@0.2.10': {}
 
   '@fontsource-variable/geist-mono@5.2.6': {}
+
+  '@fontsource-variable/jetbrains-mono@5.2.6': {}
+
+  '@fontsource/crimson-text@5.2.6': {}
 
   '@isaacs/fs-minipass@4.0.1':
     dependencies:

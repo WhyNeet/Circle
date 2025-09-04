@@ -170,7 +170,7 @@ export function EntryListItem(props: {
   return (
     <>
       <button
-        class="flex items-center gap-2 px-2 h-8 text-sm text-base-content/30 cursor-pointer hover:text-base-content/50 w-full"
+        class="flex items-center gap-2 px-2 h-8 text-sm text-base-content/30 cursor-pointer hover:text-base-content/50 w-full hover:bg-base-content/10 rounded-md"
         style={{ "margin-left": `${props.level * 24}px` }}
         onClick={handleEntryClick}
         data-path={`${props.root}/${props.entry.name}`}
