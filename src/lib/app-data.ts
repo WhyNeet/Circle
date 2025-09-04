@@ -17,7 +17,6 @@ export class AppData {
   }
 
   public async getSpaceById(id: number): Promise<Space> {
-    console.log("get id:", id);
     const result: Space[] = await this.database.select("SELECT * FROM spaces WHERE id = $1 LIMIT 1", [id]);
 
     return result[0];

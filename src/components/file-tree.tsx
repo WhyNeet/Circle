@@ -59,7 +59,7 @@ export function FileTree(props: {
         setCreateName("");
         switch (params.kind) {
           case EntryCreateKind.Note:
-            createFile(params.root + "/" + name + ".md").then(async (file) => {
+            createFile(params.root + "/" + name + ".note").then(async (file) => {
               await file.close();
               props.cancelCreate();
             });

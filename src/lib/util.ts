@@ -1,8 +1,8 @@
-export function rsplitOnce(s: string, path: string): [string | null, string] {
+export function rsplitOnce(s: string, path: string): [string, string] {
   const idx = s.lastIndexOf(path);
 
   if (idx === -1) {
-    return [null, s];
+    return ["", s];
   } else {
     const partBefore = s.substring(0, idx);
     const partAfter = s.substring(idx + path.length);

@@ -4,6 +4,7 @@ import { createSignal, Resource } from "solid-js";
 import { EntryCreateKind, FileTree } from "./file-tree";
 import { ContextMenu, ContextMenuButton } from "./ui/context-menu";
 import { rsplitOnce } from "../lib/util";
+import { useNavigate } from "@solidjs/router";
 
 export function Sidebar(props: {
   isOpen: boolean;
@@ -19,9 +20,11 @@ export function Sidebar(props: {
     root: string;
     kind: EntryCreateKind;
   } | null>(null);
+  const navigate = useNavigate();
 
   function handleFileClick(root: string, entry: DirEntry) {
-    console.log("open file:", root, entry.name);
+    const path = encodeURIComponent(`${root}/${entry.name}`);
+    navigate(`/app/${path}`);
   }
 
   function handleContextMenu(

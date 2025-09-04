@@ -1,56 +1,60 @@
-import { onMount } from "solid-js";
 import {
-  createEditor,
-  TextNode,
-  ParagraphNode,
-  LexicalEditor as LexicalEditorInstance
-} from "lexical";
-import { mergeRegister } from '@lexical/utils';
-import { createEmptyHistoryState, registerHistory } from "@lexical/history";
-import { HeadingNode, QuoteNode, registerRichText } from "@lexical/rich-text";
-import { registerDragonSupport } from "@lexical/dragon";
-import { $canShowPlaceholder } from "@lexical/text";
+  defaultValueCtx,
+  Editor,
+  editorViewOptionsCtx,
+  rootCtx,
+} from "@milkdown/kit/core";
+import { onCleanup, onMount } from "solid-js";
+import { commonmark } from "@milkdown/kit/preset/commonmark";
+import "@milkdown/kit/prose/view/style/prosemirror.css";
+import { nord } from "@milkdown/theme-nord";
+import { listener } from "@milkdown/kit/plugin/listener";
+import { placeholderCtx, placeholder as placeholderPlugin } from "./editor/plugins/placeholder";
 
-const initialConfig = {
-  namespace: 'Circle Editor',
-  nodes: [HeadingNode, QuoteNode, TextNode, ParagraphNode],
-  onError: (error: Error) => {
-    throw error;
-  },
-  theme: {
-    quote: 'PlaygroundEditorTheme__quote',
-  },
-};
-
-export function LexicalEditor({ placeholder = "Type here..." }: { placeholder?: string }) {
+export function LexicalEditor({
+  placeholder = "Type here...",
+  initialMarkdown,
+  onEditorInit,
+}: {
+  placeholder?: string;
+  initialMarkdown?: string;
+  onEditorInit: (instance: Editor) => void;
+}) {
   let editorRef: HTMLDivElement = null!;
 
-  let editor: LexicalEditorInstance = null!;
+  let editor: Editor = null!;
 
-  function updateState() {
-    editor.read(() => {
-      if ($canShowPlaceholder(false)) editorRef.setAttribute("placeholder", placeholder);
-      else editorRef.removeAttribute("placeholder");
-    });
-  }
-
-  onMount(() => {
+  onMount(async () => {
     // Create the editor instance
-    editor = createEditor(initialConfig);
-    editor.setRootElement(editorRef);
+    editor = await Editor.make()
+      .config((ctx) => {
+        ctx.set(rootCtx, editorRef);
+        if (initialMarkdown) ctx.set(defaultValueCtx, initialMarkdown);
 
-    mergeRegister(
-      registerRichText(editor),
-      registerDragonSupport(editor),
-      registerHistory(editor, createEmptyHistoryState(), 300),
-    );
+        ctx.update(editorViewOptionsCtx, (prev) => ({
+          ...prev,
+          attributes: {
+            class: "milkdown-editor h-full w-full outline-none",
+            spellcheck: "false",
+            autocorrect: "off",
+            autocapitalize: "off"
+          },
+        }));
 
-    updateState();
+        ctx.update(placeholderCtx, () => placeholder);
+      })
+      .config(nord)
+      .use(commonmark)
+      .use(listener)
+      .use(placeholderPlugin)
+      .create();
 
-    editor.registerUpdateListener(() => {
-      updateState();
-    });
+    onEditorInit(editor);
   });
 
-  return <div class="lexical-editor outline-none" contentEditable ref={editorRef} />
+  onCleanup(() => {
+    editor.destroy();
+  });
+
+  return <div class="h-full w-full" ref={editorRef} />;
 }
