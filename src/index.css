@@ -11,6 +11,8 @@
   --color-base-content: oklch(20% 0 0);
   --color-accent: oklch(62% 0.214 259.815);
   --color-accent-content: oklch(97% 0.014 254.604);
+  --color-primary: oklch(58% 0.233 277.117);
+  --color-primary-content: oklch(96% 0.018 272.314);
   --color-error: var(--color-red-500);
 }
 
@@ -40,8 +42,13 @@ p {
   @apply cursor-default;
 }
 
+.slash-menu-wrapper {
+  @apply absolute data-[show="false"]:hidden;
+}
+
+
 .milkdown {
-  @apply h-full min-h-fit w-full text-base-content;
+  @apply h-full min-h-fit w-full text-base-content relative;
 }
 
 .milkdown-editor[data-placeholder]::before {
@@ -80,6 +87,10 @@ p {
 
 .milkdown-editor pre code {
   @apply bg-transparent p-0 rounded-none;
+}
+
+.milkdown-editor a {
+  @apply text-primary;
 }
 
 .milkdown-editor blockquote {

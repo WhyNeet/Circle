@@ -17,6 +17,7 @@ import { clipboard } from "@milkdown/kit/plugin/clipboard";
 import { cursor } from "@milkdown/kit/plugin/cursor";
 import { history, historyKeymap } from "@milkdown/kit/plugin/history";
 import { indent } from "@milkdown/kit/plugin/indent";
+import { slash, slashPluginView } from "./editor/plugins/slash.tsx";
 
 export function LexicalEditor({
   placeholder = "Type here...",
@@ -59,6 +60,10 @@ export function LexicalEditor({
             shortcuts: ["Mod-y", "Shift-Mod-z"],
           },
         });
+
+        ctx.set(slash.key, {
+          view: slashPluginView
+        })
       })
       .config(nord)
       .use(commonmark)
@@ -67,6 +72,7 @@ export function LexicalEditor({
       .use(cursor)
       .use(history)
       .use(indent)
+      .use(slash)
       .use(placeholderPlugin)
       .create();
 

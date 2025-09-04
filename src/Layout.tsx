@@ -13,7 +13,7 @@ export default function Layout(props: RouteSectionProps<unknown>) {
     <header data-tauri-drag-region class="h-[52px] fixed top-0 inset-x-0 flex items-center pl-5 pr-2 justify-between z-50">
       <div class="pointer-events-none flex items-center gap-4">
         <button class="pointer-events-auto" onClick={() => setSidebarOpen(prev => !prev)}>
-          <PanelRightIcon class="h-5 w-5 text-base-content/50 rotate-180 cursor-pointer hover:text-accent" />
+          <PanelRightIcon class="h-5 w-5 text-neutral-400 dark:text-gray-500 rotate-180 cursor-pointer hover:text-accent" />
         </button>
         <div class="text-sm font-bold text-base-content">{currentSpaceData()?.name}</div>
       </div>

@@ -16,6 +16,7 @@
     "@fontsource-variable/jetbrains-mono": "^5.2.6",
     "@fontsource/crimson-text": "^5.2.6",
     "@milkdown/kit": "^7.15.5",
+    "@milkdown/plugin-slash": "^7.15.5",
     "@milkdown/theme-nord": "^7.15.5",
     "@solidjs/router": "^0.15.3",
     "@tailwindcss/vite": "^4.1.12",
