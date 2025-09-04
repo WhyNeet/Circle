@@ -19,6 +19,12 @@ export async function init() {
 
   document.addEventListener("contextmenu", (e) => e.preventDefault());
 
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    if (event.matches) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
+  });
+
+
 
   // const aboutSubmenu = await Submenu.new({
   //   text: "About",

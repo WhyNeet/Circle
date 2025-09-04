@@ -31,13 +31,14 @@ export default function ContentView() {
 
   function onEditorInit(editor: Editor) {
     editorRef = editor;
-    editor.ctx.get(listenerCtx).markdownUpdated((_, markdown, prevMarkdown) => {
-      setIsUnsaved(markdown !== prevMarkdown);
+    editor.ctx.get(listenerCtx).updated(() => {
+      setIsUnsaved(true);
     });
   }
 
   onMount(() => {
     const saveHandler = async () => {
+      if (!isUnsaved()) return;
       setIsUnsaved(false);
       const markdown = editorRef.action(getMarkdown());
       const encoder = new TextEncoder();
@@ -55,11 +56,10 @@ export default function ContentView() {
 
   return (
     <main class="h-screen w-full flex-col gap-4 cursor-default bg-base-200">
-      <header class="absolute inset-x-0 top-0 h-[52px] flex items-center pointer-events-none bg-base-200/80 backdrop-blur-lg border-b border-b-base-content/10 z-40">
+      <header class="absolute inset-x-0 top-0 h-[52px] flex items-center pointer-events-none bg-base-200/80 backdrop-blur-lg border-b border-b-black/10 dark:border-b-black/30 z-40">
         <div class="flex-1"></div>
-        <div class="text-sm text-base-content/50 z-50">
+        <div class="text-sm text-base-content/50 w-fit z-50 relative flex items-center">
           {name()}
-          {isUnsaved() ? "*" : ""}
         </div>
         <div class="flex-1"></div>
       </header>
@@ -69,10 +69,17 @@ export default function ContentView() {
             <LexicalEditor
               initialMarkdown={rawContents()}
               onEditorInit={onEditorInit}
+              class="min-h-fit h-full w-full pb-10"
             />
           )}
         </div>
       </div>
+      <footer class="absolute inset-x-0 bottom-0 h-8 z-40 bg-base-200/80 backdrop-blur-lg border-t border-t-black/10 dark:border-t-black/30 flex items-center px-5">
+        <div class="flex items-center gap-2">
+          <div class={`h-2 w-2 rounded-full ${isUnsaved() ? "bg-error" : "bg-accent"}`}></div>
+          <div class="text-xs text-base-content/70">{isUnsaved() ? "Unsaved" : "Saved"}</div>
+        </div>
+      </footer>
     </main>
   );
 }

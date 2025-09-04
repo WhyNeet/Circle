@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: "Geist Mono Variable", var(--font-mono);
@@ -13,6 +12,15 @@
   --color-accent: oklch(62% 0.214 259.815);
   --color-accent-content: oklch(97% 0.014 254.604);
   --color-error: var(--color-red-500);
+}
+
+@layer base {
+  .dark {
+    --color-base-100: oklch(25.33% 0.016 252.42);
+    --color-base-200: oklch(23.26% 0.014 253.1);
+    --color-base-300: oklch(21.15% 0.012 254.09);
+    --color-base-content: oklch(97.807% 0.029 256.847);
+  }
 }
 
 :root {
@@ -33,7 +41,7 @@ p {
 }
 
 .milkdown {
-  @apply h-full min-h-fit w-full pb-5;
+  @apply h-full min-h-fit w-full text-base-content;
 }
 
 .milkdown-editor[data-placeholder]::before {
@@ -63,7 +71,7 @@ p {
 }
 
 .milkdown-editor code {
-  @apply px-1 py-0.5 bg-base-300 rounded-md;
+  @apply px-1 py-0.5 bg-base-300 dark:bg-black/30 rounded-md font-code;
 }
 
 .milkdown-editor pre {
@@ -92,4 +100,20 @@ p {
 
 .milkdown-editor ul li p {
   @apply my-0;
+}
+
+.milkdown-editor ol {
+  @apply list-decimal pl-12;
+}
+
+.milkdown-editor ol li {
+  @apply my-2;
+}
+
+.milkdown-editor ol li p {
+  @apply my-0;
+}
+
+.milkdown-editor hr {
+  @apply border-none h-[1px] bg-base-content/30;
 }
