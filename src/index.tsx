@@ -7,7 +7,7 @@ import '@fontsource-variable/jetbrains-mono';
 import '@fontsource/crimson-text';
 
 import Root from "./Root";
-import { init } from "./lib";
+import { init } from "./lib/init";
 
 init();
 

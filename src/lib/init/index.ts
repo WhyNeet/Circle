@@ -1,15 +1,8 @@
-import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { initTheme } from "./theme";
 // import { Menu, MenuItem, PredefinedMenuItem, Submenu } from "@tauri-apps/api/menu";
 
 export async function init() {
-  await (async () => {
-    const window = getCurrentWindow();
-    const oldSize = await window.outerSize();
-    const newSize = new LogicalSize(oldSize.width, oldSize.height + 1);
-    await window.setSize(newSize);
-    await window.setSize(oldSize);
-  })();
-
   document.addEventListener('keydown', async (e) => {
     if (e.metaKey && e.key === 'm') {
       e.preventDefault();
@@ -19,12 +12,7 @@ export async function init() {
 
   document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-    if (event.matches) document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
-  });
-
-
+  initTheme();
 
   // const aboutSubmenu = await Submenu.new({
   //   text: "About",

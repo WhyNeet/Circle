@@ -17,18 +17,26 @@ import { clipboard } from "@milkdown/kit/plugin/clipboard";
 import { cursor } from "@milkdown/kit/plugin/cursor";
 import { history, historyKeymap } from "@milkdown/kit/plugin/history";
 import { indent } from "@milkdown/kit/plugin/indent";
-import { slash, slashPluginView } from "./editor/plugins/slash.tsx";
+import { tooltip, tooltipPluginView } from "./editor/plugins/tooltip";
+import {
+  remarkGFMPlugin,
+  strikethroughAttr,
+  strikethroughInputRule,
+  strikethroughKeymap,
+  strikethroughSchema,
+  toggleStrikethroughCommand,
+} from "@milkdown/kit/preset/gfm";
 
 export function LexicalEditor({
   placeholder = "Type here...",
   initialMarkdown,
   onEditorInit,
-  class: className
+  class: className,
 }: {
   placeholder?: string;
   initialMarkdown?: string;
   onEditorInit: (instance: Editor) => void;
-  class: string
+  class: string;
 }) {
   let ref: HTMLDivElement = null!;
   let editor: Editor = null!;
@@ -61,9 +69,9 @@ export function LexicalEditor({
           },
         });
 
-        ctx.set(slash.key, {
-          view: slashPluginView
-        })
+        ctx.set(tooltip.key, {
+          view: () => tooltipPluginView(ctx),
+        });
       })
       .config(nord)
       .use(commonmark)
@@ -72,8 +80,14 @@ export function LexicalEditor({
       .use(cursor)
       .use(history)
       .use(indent)
-      .use(slash)
+      .use(tooltip)
       .use(placeholderPlugin)
+      .use(strikethroughSchema)
+      .use(strikethroughKeymap)
+      .use(strikethroughInputRule)
+      .use(strikethroughAttr)
+      .use(toggleStrikethroughCommand)
+      .use(remarkGFMPlugin)
       .create();
 
     onEditorInit(editor);
