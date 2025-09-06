@@ -1,15 +1,7 @@
-import { getCurrentWindow } from "@tauri-apps/api/window";
 import { initTheme } from "./theme";
 // import { Menu, MenuItem, PredefinedMenuItem, Submenu } from "@tauri-apps/api/menu";
 
 export async function init() {
-  document.addEventListener('keydown', async (e) => {
-    if (e.metaKey && e.key === 'm') {
-      e.preventDefault();
-      await getCurrentWindow().minimize();
-    }
-  });
-
   document.addEventListener("contextmenu", (e) => e.preventDefault());
 
   initTheme();

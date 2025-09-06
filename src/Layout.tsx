@@ -19,7 +19,7 @@ export default function Layout(props: RouteSectionProps<unknown>) {
       </div>
     </header>
     <Sidebar isOpen={sidebarOpen()} currentSpace={currentSpaceData} />
-    <div class="h-screen flex-1 relative">
+    <div class="h-screen flex-1 relative bg-base-200">
       {props.children}
     </div>
   </main>
