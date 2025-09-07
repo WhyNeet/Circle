@@ -31,6 +31,7 @@ pub fn run() {
                         .effects(vec![Effect::Titlebar, Effect::HudWindow])
                         .build(),
                 )
+                .disable_drag_drop_handler()
                 .traffic_light_position(LogicalPosition::new(-100, -100));
 
             win_builder.build().unwrap();
