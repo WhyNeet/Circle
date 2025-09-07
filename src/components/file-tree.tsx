@@ -25,11 +25,14 @@ export interface FileTreeContext {
     setName: Setter<string>;
   } | null>;
   refresh: Accessor<string>;
+  setSelectedFile: Setter<string | null>;
+  selectedFile: Accessor<string | null>;
 }
 
 export interface FileTreeRef {
   showCreateInput: (prefix: string, kind: EntryCreateKind) => void;
   refresh: (prefix: string) => void;
+  selectFile: (path: string) => void;
 }
 
 const FileTreeContext = createContext<FileTreeContext>();
@@ -44,12 +47,14 @@ export function FileTree(props: {
     createSignal<ReturnType<FileTreeContext["createInfo"]>>(null);
   const [currentName, setCurrentName] = createSignal("");
   const [refresh, setRefresh] = createSignal("", { equals: () => false });
+  const [selectedFile, setSelectedFile] = createSignal<string | null>(null);
 
   const fileTreeRef: FileTreeRef = {
     showCreateInput: (prefix, kind) => {
       setCreateInfo({ prefix, kind, setName: setCurrentName });
     },
     refresh: (prefix) => setRefresh(prefix),
+    selectFile: (path) => setSelectedFile(path),
   };
 
   onMount(() => {
@@ -80,7 +85,9 @@ export function FileTree(props: {
   });
 
   return (
-    <FileTreeContext.Provider value={{ createInfo, refresh }}>
+    <FileTreeContext.Provider
+      value={{ createInfo, refresh, selectedFile, setSelectedFile }}
+    >
       <EntryList
         handleFileClick={props.handleFileClick}
         root={props.root}
@@ -147,12 +154,16 @@ export function EntryListItem(props: {
   handleFileClick: (root: string, entry: DirEntry) => void;
   level: number;
 }) {
-  const { createInfo } = useFileTreeContext();
+  const { createInfo, selectedFile, setSelectedFile } = useFileTreeContext();
+  const isSelected = () =>
+    selectedFile() === `${props.root}/${props.entry.name}`;
   const [isExpanded, setIsExpanded] = createSignal(false);
 
   function handleEntryClick() {
-    if (props.entry.isFile)
+    if (props.entry.isFile) {
+      setSelectedFile(`${props.root}/${props.entry.name}`);
       return props.handleFileClick(props.root, props.entry);
+    }
     setIsExpanded((prev) => !prev);
   }
 
@@ -166,7 +177,7 @@ export function EntryListItem(props: {
       <div class="flex" style={{ width: "calc(256px - 0.75rem)" }}>
         <div style={{ "min-width": `${props.level * 24}px` }} />
         <button
-          class="flex items-center gap-2 px-2 h-8 text-sm text-base-content/30 cursor-pointer hover:text-base-content/50 hover:bg-base-content/10 rounded-md min-w-[calc(256px-1.5rem)]"
+          class={`flex items-center gap-2 px-2 h-8 text-sm cursor-pointer ${isSelected() ? "bg-base-100 text-base-content/50 shadow-lg" : "hover:text-base-content/50 text-base-content/30"} rounded-md min-w-[calc(256px-1.5rem)]`}
           onClick={handleEntryClick}
           data-path={`${props.root}/${props.entry.name}`}
         >

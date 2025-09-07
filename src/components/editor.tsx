@@ -91,6 +91,7 @@ export function LexicalEditor({
       .use(indent)
       .use(tooltip)
       .use(linkTooltip)
+      .use(linkInputRule)
       .use(placeholderPlugin)
       .use(strikethroughSchema)
       .use(strikethroughKeymap)
@@ -98,7 +99,6 @@ export function LexicalEditor({
       .use(strikethroughAttr)
       .use(toggleStrikethroughCommand)
       .use(remarkGFMPlugin)
-      .use(linkInputRule)
       .create();
 
     onEditorInit(editor);

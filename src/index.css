@@ -111,6 +111,13 @@ p {
   @apply text-primary;
 }
 
+.milkdown-editor a,
+.milkdown-editor .link {
+  pointer-events: none;
+  cursor: text;
+  /* Optional: makes it clear this is editable text */
+}
+
 .milkdown-editor blockquote {
   @apply my-4 px-4 py-2 border-l border-l-base-content/70 font-quote italic;
 }

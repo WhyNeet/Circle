@@ -19,7 +19,7 @@ function TooltipComponent(props: {
     return getCurrentLink(props.selection());
   });
 
-  function getCurrentLink(selection: Selection) {
+  function getCurrentLink(selection: Selection): string {
     if (!selection) return "";
 
     const { $from } = selection;
@@ -99,7 +99,16 @@ function TooltipComponent(props: {
         <>
           <button
             class="cursor-pointer text-sm text-primary"
-            onClick={() => openUrl(url())}
+            onClick={() => {
+              if (url().startsWith("#"))
+                return document
+                  .getElementById(url().slice(1))
+                  ?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                  });
+              openUrl(url());
+            }}
           >
             {url()}
           </button>

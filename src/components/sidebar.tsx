@@ -1,6 +1,6 @@
 import { Space } from "../lib/state";
 import { DirEntry, stat, remove } from "@tauri-apps/plugin-fs";
-import { createSignal, Resource } from "solid-js";
+import { createSignal, createEffect, Resource } from "solid-js";
 import { EntryCreateKind, FileTree, FileTreeRef } from "./file-tree";
 import { ContextMenu, ContextMenuButton } from "./ui/context-menu";
 import { rsplitOnce } from "../lib/util";
@@ -19,6 +19,11 @@ export function Sidebar(props: {
   const navigate = useNavigate();
   const params = useParams();
   const [fileTreeRef, setFileTreeRef] = createSignal<FileTreeRef>(null!);
+
+  createEffect(() => {
+    if (!fileTreeRef() || !params["path"]) return;
+    fileTreeRef().selectFile(decodeURIComponent(params["path"]));
+  });
 
 
   function handleFileClick(root: string, entry: DirEntry) {
