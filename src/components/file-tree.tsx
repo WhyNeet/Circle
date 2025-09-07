@@ -1,14 +1,15 @@
-import {
-  DirEntry,
-  readDir,
-} from "@tauri-apps/plugin-fs";
+import { create, DirEntry, mkdir, readDir } from "@tauri-apps/plugin-fs";
 import ChevronRightIcon from "lucide-solid/icons/chevron-right";
 import {
+  Accessor,
   createContext,
+  createEffect,
   createResource,
   createSignal,
   For,
+  onCleanup,
   onMount,
+  Setter,
   useContext,
 } from "solid-js";
 
@@ -18,11 +19,17 @@ export enum EntryCreateKind {
 }
 
 export interface FileTreeContext {
-
+  createInfo: Accessor<{
+    prefix: string;
+    kind: EntryCreateKind;
+    setName: Setter<string>;
+  } | null>;
+  refresh: Accessor<string>;
 }
 
 export interface FileTreeRef {
   showCreateInput: (prefix: string, kind: EntryCreateKind) => void;
+  refresh: (prefix: string) => void;
 }
 
 const FileTreeContext = createContext<FileTreeContext>();
@@ -31,18 +38,49 @@ const useFileTreeContext = () => useContext(FileTreeContext)!;
 export function FileTree(props: {
   root: string;
   handleFileClick: (root: string, entry: DirEntry) => void;
-  ref?: FileTreeRef;
+  ref?: (ref: FileTreeRef) => void;
 }) {
+  const [createInfo, setCreateInfo] =
+    createSignal<ReturnType<FileTreeContext["createInfo"]>>(null);
+  const [currentName, setCurrentName] = createSignal("");
+  const [refresh, setRefresh] = createSignal("", { equals: () => false });
+
   const fileTreeRef: FileTreeRef = {
-    showCreateInput: (prefix, kind) => { },
+    showCreateInput: (prefix, kind) => {
+      setCreateInfo({ prefix, kind, setName: setCurrentName });
+    },
+    refresh: (prefix) => setRefresh(prefix),
   };
 
   onMount(() => {
-    props.ref = fileTreeRef;
+    props.ref?.(fileTreeRef);
+
+    const windowClickHandler = async () => {
+      if (!createInfo()) return;
+
+      if (currentName().length) {
+        switch (createInfo()!.kind) {
+          case EntryCreateKind.Note:
+            await create(`${createInfo()!.prefix}/${currentName()}.md`);
+            break;
+          case EntryCreateKind.Dir:
+            await mkdir(`${createInfo()!.prefix}/${currentName()}`);
+            break;
+        }
+        setRefresh(createInfo()!.prefix);
+      }
+      setCreateInfo(null);
+      setCurrentName("");
+    };
+    window.addEventListener("mousedown", windowClickHandler);
+
+    onCleanup(() => {
+      window.removeEventListener("mousedown", windowClickHandler);
+    });
   });
 
   return (
-    <FileTreeContext.Provider value={{}}>
+    <FileTreeContext.Provider value={{ createInfo, refresh }}>
       <EntryList
         handleFileClick={props.handleFileClick}
         root={props.root}
@@ -57,10 +95,21 @@ export function EntryList(props: {
   handleFileClick: (root: string, entry: DirEntry) => void;
   level: number;
 }) {
-  const [contents, { }] = createResource(
+  const { createInfo, refresh } = useFileTreeContext();
+  const isCreating = () => createInfo()?.prefix === props.root;
+  const [contents, { refetch }] = createResource(
     props.root,
     async (path) => await readDir(path),
   );
+  let inputRef: HTMLInputElement = null!;
+
+  createEffect(() => {
+    if (isCreating()) inputRef.focus();
+  });
+
+  createEffect(() => {
+    if (refresh() === props.root) refetch();
+  });
 
   return (
     <>
@@ -76,6 +125,18 @@ export function EntryList(props: {
           )}
         </For>
       ) : null}
+      {isCreating() ? (
+        <input
+          onMouseDown={(e) => e.stopPropagation()}
+          class="outline-none text-sm text-base-content h-8 px-2"
+          ref={inputRef}
+          onInput={(e) => createInfo()!.setName(e.currentTarget.value)}
+          style={{ "margin-left": `${props.level * 24}px` }}
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+        />
+      ) : null}
     </>
   );
 }
@@ -86,6 +147,7 @@ export function EntryListItem(props: {
   handleFileClick: (root: string, entry: DirEntry) => void;
   level: number;
 }) {
+  const { createInfo } = useFileTreeContext();
   const [isExpanded, setIsExpanded] = createSignal(false);
 
   function handleEntryClick() {
@@ -93,6 +155,11 @@ export function EntryListItem(props: {
       return props.handleFileClick(props.root, props.entry);
     setIsExpanded((prev) => !prev);
   }
+
+  createEffect(() => {
+    if (createInfo()?.prefix === `${props.root}/${props.entry.name}`)
+      setIsExpanded(true);
+  });
 
   return (
     <>
@@ -119,8 +186,7 @@ export function EntryListItem(props: {
           handleFileClick={props.handleFileClick}
           level={props.level + 1}
         />
-      ) : null
-      }
+      ) : null}
     </>
   );
 }

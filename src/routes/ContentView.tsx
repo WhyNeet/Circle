@@ -1,5 +1,6 @@
 import { useParams } from "@solidjs/router";
 import {
+  createEffect,
   createMemo,
   createResource,
   createSignal,
@@ -26,6 +27,11 @@ export default function ContentView() {
   });
   let editorRef: Editor = null!;
   const [isUnsaved, setIsUnsaved] = createSignal(false);
+
+  createEffect(() => {
+    path();
+    setIsUnsaved(false);
+  });
 
   function onEditorInit(editor: Editor) {
     editorRef = editor;
