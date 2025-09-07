@@ -26,6 +26,11 @@ import {
   strikethroughSchema,
   toggleStrikethroughCommand,
 } from "@milkdown/kit/preset/gfm";
+import {
+  linkTooltip,
+  linkTooltipPluginView,
+} from "./editor/plugins/link-preview";
+import { linkInputRule } from "./editor/input-rules/link";
 
 export function LexicalEditor({
   placeholder = "Type here...",
@@ -72,6 +77,10 @@ export function LexicalEditor({
         ctx.set(tooltip.key, {
           view: () => tooltipPluginView(ctx),
         });
+
+        ctx.set(linkTooltip.key, {
+          view: linkTooltipPluginView,
+        });
       })
       .config(nord)
       .use(commonmark)
@@ -81,6 +90,7 @@ export function LexicalEditor({
       .use(history)
       .use(indent)
       .use(tooltip)
+      .use(linkTooltip)
       .use(placeholderPlugin)
       .use(strikethroughSchema)
       .use(strikethroughKeymap)
@@ -88,6 +98,7 @@ export function LexicalEditor({
       .use(strikethroughAttr)
       .use(toggleStrikethroughCommand)
       .use(remarkGFMPlugin)
+      .use(linkInputRule)
       .create();
 
     onEditorInit(editor);

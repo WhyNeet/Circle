@@ -79,6 +79,15 @@
           "path": "**/*"
         }
       ]
+    },
+    "opener:default",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        {
+          "path": "*"
+        }
+      ]
     }
   ]
 }

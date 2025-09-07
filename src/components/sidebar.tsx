@@ -64,7 +64,7 @@ export function Sidebar(props: {
 
   return (
     <aside
-      class={`border-r after:absolute after:right-0 after:inset-y-0 after:w-[5px] relative pt-[52px] ${props.isOpen ? "w-3xs border-r-black/10 dark:border-r-black/50 after:opacity-5" : "w-0 border-r-transparent after:opacity-0"} transition-all`}
+      class={`border-r after:absolute after:right-0 after:inset-y-0 after:w-[5px] relative pt-[52px] ${props.isOpen ? "w-3xs border-r-black/10 dark:border-r-black/50 after:opacity-5" : "w-0 border-r-0 after:opacity-0"} transition-all`}
     >
       <div
         class={`min-w-3xs w-full transition-all ${props.isOpen ? "opacity-100" : "opacity-0"} ${contextMenuPosition() ? "overflow-hidden" : "overflow-auto"} pt-0 h-full`}
