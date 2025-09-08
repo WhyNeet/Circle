@@ -10,16 +10,16 @@ export default function Layout(props: RouteSectionProps<unknown>) {
   const [currentSpaceData] = createResource(currentSpace, appData()!.getSpaceById.bind(appData()));
 
   return <main class="flex h-screen w-screen relative">
-    <header data-tauri-drag-region class="h-[52px] fixed top-0 inset-x-0 flex items-center pl-5 pr-2 justify-between z-50">
-      <div class="pointer-events-none flex items-center gap-4">
-        <button class="pointer-events-auto" onClick={() => setSidebarOpen(prev => !prev)}>
-          <PanelRightIcon class="h-5 w-5 text-neutral-500 rotate-180 cursor-pointer hover:text-accent" />
+    <header class="h-[52px] fixed top-0 inset-x-0 flex items-center pl-5 pr-2 justify-between z-50 pointer-events-none">
+      <div class="flex items-center gap-4">
+        <button class="pointer-events-auto cursor-pointer relative after:-z-10 after:absolute after:-inset-1 after:rounded-md hover:after:bg-base-content/5 text-neutral-500 active:after:bg-base-content/10 active:brightness-150" onClick={() => setSidebarOpen(prev => !prev)}>
+          <PanelRightIcon class="h-5 w-5 rotate-180" />
         </button>
         <div class="text-sm font-bold text-base-content">{currentSpaceData()?.name}</div>
       </div>
     </header>
     <Sidebar isOpen={sidebarOpen()} currentSpace={currentSpaceData} />
-    <div class="h-screen flex-1 relative bg-base-200">
+    <div class="h-screen flex-1 relative">
       {props.children}
     </div>
   </main>

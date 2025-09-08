@@ -26,9 +26,11 @@ pub fn run() {
                 .hidden_title(true)
                 .decorations(true)
                 .transparent(true)
+                .min_inner_size(800., 600.)
+                .inner_size(1050., 700.)
                 .effects(
                     EffectsBuilder::new()
-                        .effects(vec![Effect::Titlebar, Effect::HudWindow])
+                        .effects(vec![Effect::HudWindow])
                         .build(),
                 )
                 .disable_drag_drop_handler()

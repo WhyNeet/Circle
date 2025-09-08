@@ -32,7 +32,7 @@ import {
 } from "./editor/plugins/link-preview";
 import { linkInputRule } from "./editor/input-rules/link";
 
-export function LexicalEditor({
+export function MarkdownEditor({
   placeholder = "Type here...",
   initialMarkdown,
   onEditorInit,
