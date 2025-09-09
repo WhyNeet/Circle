@@ -92,7 +92,7 @@ export default function ContentView() {
     <main class="h-screen w-full cursor-default flex overflow-hidden">
       <header class="absolute inset-x-0 top-0 z-50 pointer-events-none flex items-center justify-end h-[52px] px-5">
         <button
-          class="relative pointer-events-auto cursor-pointer after:-z-10 after:absolute after:-inset-1 after:rounded-md hover:after:bg-base-content/5 text-neutral-600 dark:text-neutral-400 active:after:bg-base-content/10 active:brightness-150 z-50"
+          class="relative pointer-events-auto cursor-pointer after:-z-10 after:absolute after:-inset-1 after:rounded-md hover:after:bg-base-content/5 text-neutral-600 dark:text-neutral-400 active:after:bg-base-content/10 active:brightness-50 dark:active:brightness-150 z-50"
           onClick={() => setSidebarOpen((prev) => !prev)}
         >
           <PanelRightIcon class="h-5 w-5 stroke-[1.7px]" />
@@ -104,7 +104,7 @@ export default function ContentView() {
           class="absolute inset-x-0 top-0 h-[52px] flex items-center bg-base-200/80 backdrop-blur-lg border-b border-b-black/10 dark:border-b-black/30 z-40 px-5"
         >
           <div class="flex-1 pointer-events-none"></div>
-          <div class="text-sm text-base-content/50 w-fit z-50 relative flex items-center">
+          <div class="text-sm text-base-content/50 w-fit z-50 relative flex items-center pointer-events-none">
             {name()}
           </div>
           <div class="flex-1">
