@@ -15,6 +15,8 @@ import { listenerCtx } from "@milkdown/kit/plugin/listener";
 import { getMarkdown, outline } from "@milkdown/kit/utils";
 import { ContentViewSidebar } from "../components/content-view-sidebar";
 
+export type OutlineUnit = { text: string; level: number; id: string; };
+
 export default function ContentView() {
   const params = useParams();
   const path = createMemo(() => {
@@ -28,6 +30,7 @@ export default function ContentView() {
     return raw.length ? raw : undefined;
   });
   let editorRef: Editor = null!;
+  const [docOutline, setDocOutline] = createSignal<OutlineUnit[]>([]);
   const [isUnsaved, setIsUnsaved] = createSignal(false);
   const [sidebarOpen, setSidebarOpen] = createSignal(false);
 
@@ -40,8 +43,11 @@ export default function ContentView() {
     editorRef = editor;
     editor.ctx.get(listenerCtx).updated(() => {
       setIsUnsaved(true);
+      setDocOutline(editor.action(outline()));
       updateHeading();
     });
+
+    setDocOutline(editor.action(outline()));
 
     function updateHeading() {
       const headingCandidate =
@@ -83,13 +89,13 @@ export default function ContentView() {
   });
 
   return (
-    <main class="h-screen w-full cursor-default flex">
+    <main class="h-screen w-full cursor-default flex overflow-hidden">
       <header class="absolute inset-x-0 top-0 z-50 pointer-events-none flex items-center justify-end h-[52px] px-5">
         <button
-          class="relative pointer-events-auto cursor-pointer after:-z-10 after:absolute after:-inset-1 after:rounded-md hover:after:bg-base-content/5 text-neutral-500 active:after:bg-base-content/10 active:brightness-150 z-50"
+          class="relative pointer-events-auto cursor-pointer after:-z-10 after:absolute after:-inset-1 after:rounded-md hover:after:bg-base-content/5 text-neutral-600 dark:text-neutral-400 active:after:bg-base-content/10 active:brightness-150 z-50"
           onClick={() => setSidebarOpen((prev) => !prev)}
         >
-          <PanelRightIcon class="h-5 w-5" />
+          <PanelRightIcon class="h-5 w-5 stroke-[1.7px]" />
         </button>
       </header>
       <div class="h-full w-full relative">
@@ -126,7 +132,7 @@ export default function ContentView() {
           </div>
         </footer>
       </div>
-      <ContentViewSidebar isOpen={sidebarOpen()} />
+      <ContentViewSidebar isOpen={sidebarOpen()} outline={docOutline} />
     </main>
   );
 }
