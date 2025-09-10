@@ -1,21 +1,28 @@
 import { createEffect, createSignal } from "solid-js";
 import ArrowRightIcon from "lucide-solid/icons/arrow-right";
+import ChevronLeftIcon from "lucide-solid/icons/chevron-left";
 import { Loader } from "../components/ui/loader";
 import { desktopDir } from "@tauri-apps/api/path";
 import { exists, mkdir } from "@tauri-apps/plugin-fs";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useAppContext } from "../lib/state";
-import { useNavigate } from "@solidjs/router";
+import { useNavigate, useSearchParams } from "@solidjs/router";
 
 export default function NewSpace() {
   const { appData } = useAppContext();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [spaceColor, setSpaceColor] = createSignal<string | null>(null);
   const [spaceName, setSpaceName] = createSignal("");
   const [isCreating, setIsCreating] = createSignal(false);
   const [locationError, setLocationError] = createSignal<string | null>(null);
   const [location, setLocation] = createSignal("");
-  const fullLocation = () => location() + "/" + (spaceName().trim().length ? spaceName().trim().replace(" ", "-").toLowerCase() : "my-new-space");
+  const fullLocation = () =>
+    location() +
+    "/" +
+    (spaceName().trim().length
+      ? spaceName().trim().replace(" ", "-").toLowerCase()
+      : "my-new-space");
 
   desktopDir().then((dir) => setLocation(dir));
 
@@ -60,16 +67,24 @@ export default function NewSpace() {
 
     if (!selection) return;
     setLocation(selection);
-  };
+  }
 
   return (
     <main class="h-screen w-screen bg-base-200 flex" data-tauri-drag-region>
+      <button
+        class="fixed top-4 left-4 h-8 w-8 rounded-md cursor-pointer text-base-content flex items-center justify-center"
+        onClick={() => navigate((searchParams["from"] as string) ?? "/")}
+      >
+        <ChevronLeftIcon class="h-5 w-5" />
+      </button>
       <div class="flex items-center justify-center flex-col text-center pointer-events-none bg-base-300 px-10 w-96">
         <div
           class={`h-20 w-20 rounded-full mb-10 ${spaceColor() ? "" : "border border-base-content/30 border-dashed"}`}
           style={{ background: spaceColor() ?? "transparent" }}
         />
-        <h1 class="font-bold text-2xl mb-2">Create your space</h1>
+        <h1 class="font-bold text-2xl mb-2 text-base-content">
+          Create your space
+        </h1>
         <p class="text-sm text-base-content/70 mb-6">
           Spaces help you organize notes and resources for different areas of
           your life.
@@ -84,7 +99,7 @@ export default function NewSpace() {
         </label>
         <input
           id="space-name"
-          class="outline-none mb-10 w-full pointer-events-auto"
+          class="outline-none mb-10 w-full pointer-events-auto text-base-content"
           placeholder="My New Space"
           value={spaceName()}
           onInput={handleInput}
@@ -98,8 +113,12 @@ export default function NewSpace() {
           onClick={handleLocationClick}
         >
           <label class="text-xs text-base-content/50 w-full">Location</label>
-          <div class="cursor-pointer group-disabled:cursor-default">{fullLocation()}</div>
-          {locationError() ? <p class="text-error text-xs">{locationError()}</p> : null}
+          <div class="cursor-pointer group-disabled:cursor-default text-base-content">
+            {fullLocation()}
+          </div>
+          {locationError() ? (
+            <p class="text-error text-xs">{locationError()}</p>
+          ) : null}
         </button>
         <button
           disabled={!spaceName().trim().length || isCreating()}

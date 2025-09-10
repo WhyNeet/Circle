@@ -25,7 +25,6 @@ export function Sidebar(props: {
     fileTreeRef().selectFile(decodeURIComponent(params["path"]));
   });
 
-
   function handleFileClick(root: string, entry: DirEntry) {
     const path = encodeURIComponent(`${root}/${entry.name}`);
     navigate(`/app/${path}`);
@@ -38,7 +37,9 @@ export function Sidebar(props: {
     },
   ) {
     setContextMenuPosition([e.clientX, e.clientY]);
-    setContextMenuSelection(e.target.getAttribute("data-path") ?? props.currentSpace()!.path);
+    setContextMenuSelection(
+      e.target.getAttribute("data-path") ?? props.currentSpace()!.path,
+    );
   }
 
   async function handleCreateNote() {
@@ -71,7 +72,10 @@ export function Sidebar(props: {
     <aside
       class={`border-r after:absolute after:right-0 after:inset-y-0 after:w-[5px] flex flex-col relative ${props.isOpen ? "w-3xs border-r-black/10 dark:border-r-black/50 after:opacity-5" : "w-0 border-r-0 after:opacity-0"} transition-all`}
     >
-      <div data-tauri-drag-region class="w-full h-[52px]" />
+      <div
+        data-tauri-drag-region
+        class="min-w-3xs h-[52px] flex items-center justify-end px-3"
+      />
       <div
         class={`min-w-3xs flex-1 transition-all ${props.isOpen ? "opacity-100" : "opacity-0"} ${contextMenuPosition() ? "overflow-hidden" : "overflow-auto"} pt-0 h-full`}
         onContextMenu={handleContextMenu}
@@ -96,9 +100,7 @@ export function Sidebar(props: {
         <ContextMenuButton onClick={handleCreateFolder}>
           New Folder
         </ContextMenuButton>
-        <ContextMenuButton onClick={handleDelete}>
-          Delete
-        </ContextMenuButton>
+        <ContextMenuButton onClick={handleDelete}>Delete</ContextMenuButton>
       </ContextMenu>
     </aside>
   );

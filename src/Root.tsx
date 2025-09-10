@@ -5,10 +5,11 @@ import Empty from "./routes/Empty";
 import { AppContextProvider } from "./lib/state/provider";
 import NewSpace from "./routes/NewSpace";
 import ContentView from "./routes/ContentView";
+import { AppLayout } from "./lib/init/index.tsx";
 
 export default function Root() {
   return <AppContextProvider>
-    <Router>
+    <Router root={AppLayout}>
       <Route path="/" component={Index} />
       <Route path="/new-space" component={NewSpace} />
       <Route path="/app" component={Layout}>

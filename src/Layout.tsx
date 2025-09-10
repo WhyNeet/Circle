@@ -1,13 +1,17 @@
-import { createResource, createSignal } from "solid-js";
+import { createEffect, createResource, createSignal } from "solid-js";
 import PanelRightIcon from "lucide-solid/icons/panel-right";
 import { RouteSectionProps } from "@solidjs/router";
 import { Sidebar } from "./components/sidebar";
 import { useAppContext } from "./lib/state";
 
 export default function Layout(props: RouteSectionProps<unknown>) {
-  const [sidebarOpen, setSidebarOpen] = createSignal(false);
+  const [sidebarOpen, setSidebarOpen] = createSignal(Boolean(Number(localStorage.getItem("sidebar-open"))));
   const { currentSpace, appData } = useAppContext();
   const [currentSpaceData] = createResource(currentSpace, appData()!.getSpaceById.bind(appData()));
+
+  createEffect(() => {
+    localStorage.setItem("sidebar-open", Number(sidebarOpen()).toString());
+  });
 
   return <main class="flex h-screen w-screen relative">
     <header class="h-[52px] fixed top-0 inset-x-0 flex items-center pl-5 pr-2 justify-between z-50 pointer-events-none">

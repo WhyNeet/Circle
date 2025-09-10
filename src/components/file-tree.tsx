@@ -174,7 +174,7 @@ export function EntryListItem(props: {
 
   return (
     <>
-      <div class="flex" style={{ width: "calc(256px - 0.75rem)" }}>
+      <div class="flex animate-in fade-in" style={{ width: "calc(256px - 0.75rem)" }}>
         <div style={{ "min-width": `${props.level * 24}px` }} />
         <button
           class={`flex items-center gap-2 px-2 h-8 text-sm cursor-pointer ${isSelected() ? "bg-base-100 text-base-content/70 shadow-lg" : "hover:text-base-content/70 text-base-content/50"} rounded-md min-w-[calc(256px-1.5rem)]`}
