@@ -1,5 +1,6 @@
 import { useNavigate } from "@solidjs/router";
 import {
+  CheckMenuItem,
   Menu,
   MenuItem,
   PredefinedMenuItem,
@@ -7,9 +8,10 @@ import {
 } from "@tauri-apps/api/menu";
 import { useAppContext } from "../state";
 import { EntryCreateKind } from "../../components/file-tree";
+import { createEffect } from "solid-js";
 
 export function SystemMenu() {
-  const { fileTreeRef, currentSpace, appData } = useAppContext();
+  const { fileTreeRef, currentSpace, appData, setCurrentSpace } = useAppContext();
   const navigate = useNavigate();
 
   const init = async () => {
@@ -55,7 +57,7 @@ export function SystemMenu() {
           action: async () => {
             const space = await appData()!.getSpaceById(currentSpace());
             fileTreeRef()?.showCreateInput(space.path, EntryCreateKind.Note);
-          }
+          },
         }),
       ],
     });
@@ -105,6 +107,48 @@ export function SystemMenu() {
       ],
     });
 
+    const spacesList = await Submenu.new({
+      text: "Space",
+      items: await Promise.all(
+        (await appData()!.getSpaces()).map(
+          async (space) =>
+            await CheckMenuItem.new({
+              id: `space-${space.id}`,
+              text: space.name,
+              checked: currentSpace() === space.id,
+              action: () => setCurrentSpace(space.id),
+            }),
+        ),
+      ),
+    });
+
+    const updateSpaces = async () => {
+      for (const item of await spacesList.items()) {
+        await spacesList.remove(item);
+        await item.close();
+      }
+
+      for (const space of await appData()!.getSpaces()) {
+        await spacesList.append(
+          await CheckMenuItem.new({
+            id: `space-${space.id}`,
+            text: space.name,
+            checked: currentSpace() === space.id,
+            action: () => setCurrentSpace(space.id),
+          }),
+        );
+      }
+    };
+
+    createEffect(() => {
+      currentSpace();
+      spacesList.items().then(items => {
+        for (const item of items) (item as CheckMenuItem).setChecked(currentSpace() === Number(item.id.split("-")[1]));
+      });
+    });
+
+    appData()!.addEventListener("change", updateSpaces);
+
     const spacesSubmenu = await Submenu.new({
       text: "Spaces",
       items: [
@@ -113,6 +157,7 @@ export function SystemMenu() {
           text: "New Space",
           action: () => navigate("/new-space"),
         }),
+        spacesList,
       ],
     });
 

@@ -1,8 +1,10 @@
 import Database from "@tauri-apps/plugin-sql";
 import { Space } from "./state";
 
-export class AppData {
-  constructor(private database: Database) { }
+export class AppData extends EventTarget {
+  constructor(private database: Database) {
+    super();
+  }
 
   public static async load(): Promise<AppData> {
     const db = await Database.load("sqlite:app.db");
@@ -24,5 +26,6 @@ export class AppData {
 
   public async createSpace(name: string, path: string, color: string): Promise<void> {
     await this.database.execute("INSERT INTO spaces (name, path, color) VALUES ($1, $2, $3)", [name, path, color]);
+    this.dispatchEvent(new Event("change"));
   }
 }
