@@ -1,7 +1,7 @@
-import { Space } from "../lib/state";
+import { Space, useAppContext } from "../lib/state";
 import { DirEntry, stat, remove } from "@tauri-apps/plugin-fs";
 import { createSignal, createEffect, Resource } from "solid-js";
-import { EntryCreateKind, FileTree, FileTreeRef } from "./file-tree";
+import { EntryCreateKind, FileTree } from "./file-tree";
 import { ContextMenu, ContextMenuButton } from "./ui/context-menu";
 import { rsplitOnce } from "../lib/util";
 import { useNavigate, useParams } from "@solidjs/router";
@@ -10,6 +10,7 @@ export function Sidebar(props: {
   isOpen: boolean;
   currentSpace: Resource<Space>;
 }) {
+  const { setFileTreeRef, fileTreeRef } = useAppContext();
   const [contextMenuPosition, setContextMenuPosition] = createSignal<
     [number, number] | null
   >(null);
@@ -18,11 +19,10 @@ export function Sidebar(props: {
   >(null);
   const navigate = useNavigate();
   const params = useParams();
-  const [fileTreeRef, setFileTreeRef] = createSignal<FileTreeRef>(null!);
 
   createEffect(() => {
     if (!fileTreeRef() || !params["path"]) return;
-    fileTreeRef().selectFile(decodeURIComponent(params["path"]));
+    fileTreeRef()!.selectFile(decodeURIComponent(params["path"]));
   });
 
   function handleFileClick(root: string, entry: DirEntry) {
@@ -47,7 +47,7 @@ export function Sidebar(props: {
     const entry = await stat(rawPath);
     const rootPath = entry.isFile ? rsplitOnce(rawPath, "/")[1] : rawPath;
     setContextMenuPosition(null);
-    fileTreeRef().showCreateInput(rootPath, EntryCreateKind.Note);
+    fileTreeRef()!.showCreateInput(rootPath, EntryCreateKind.Note);
   }
 
   async function handleCreateFolder() {
@@ -55,7 +55,7 @@ export function Sidebar(props: {
     const entry = await stat(rawPath);
     const rootPath = entry.isFile ? rsplitOnce(rawPath, "/")[1] : rawPath;
     setContextMenuPosition(null);
-    fileTreeRef().showCreateInput(rootPath, EntryCreateKind.Dir);
+    fileTreeRef()!.showCreateInput(rootPath, EntryCreateKind.Dir);
   }
 
   async function handleDelete() {
@@ -65,7 +65,7 @@ export function Sidebar(props: {
     if (decodeURIComponent(params["path"]) === rawPath) navigate("/app");
     await remove(rawPath, { recursive: true });
     setContextMenuPosition(null);
-    fileTreeRef().refresh(root);
+    fileTreeRef()!.refresh(root);
   }
 
   return (

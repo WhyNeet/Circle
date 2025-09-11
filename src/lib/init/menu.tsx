@@ -5,8 +5,11 @@ import {
   PredefinedMenuItem,
   Submenu,
 } from "@tauri-apps/api/menu";
+import { useAppContext } from "../state";
+import { EntryCreateKind } from "../../components/file-tree";
 
 export function SystemMenu() {
+  const { fileTreeRef, currentSpace, appData } = useAppContext();
   const navigate = useNavigate();
 
   const init = async () => {
@@ -46,9 +49,13 @@ export function SystemMenu() {
       text: "File",
       items: [
         await MenuItem.new({
-          id: "new-file",
+          id: "new-note",
           text: "New Note",
           accelerator: "Cmd+N",
+          action: async () => {
+            const space = await appData()!.getSpaceById(currentSpace());
+            fileTreeRef()?.showCreateInput(space.path, EntryCreateKind.Note);
+          }
         }),
       ],
     });
